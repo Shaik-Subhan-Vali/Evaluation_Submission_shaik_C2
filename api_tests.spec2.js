@@ -6,13 +6,13 @@ describe('Simple books api', () => {
     let id
 
     it('API authentication', () => {
-        // Read the CSV file and parse its contents
+        // Reading the data from CSV file 
         cy.fixture('dd - Sheet1.csv').then((rows) => {
             rows.forEach((row) => {
-                // Make a POST request for each row in the CSV
+                // Making a POST request to enter the data
                 cy.request({
                     method: 'POST',
-                    url: `${baseurl}/api-clients/`,
+                    url: baseurl + "/api-clients/",
                     body: {
                         "clientName": row.clientName,
                         "clientEmail": row.clientEmail
@@ -26,9 +26,9 @@ describe('Simple books api', () => {
                     
                 });
             });
-        });
+    });
     
-    
+    //using get method to fetch status information
     it('Get Status', () => {
         cy.request({
             method: 'GET',
@@ -41,6 +41,7 @@ describe('Simple books api', () => {
         })
     });
 
+   //using get method to fetch list of books information
     it('Get list of books', ()=>{
         cy.request({
             method : 'GET',
@@ -52,14 +53,20 @@ describe('Simple books api', () => {
             expect(x.status).to.equal(200);
         })
     })
-
-    it('Get a single books', ()=>{
+    it('Orders ', () => {
+        // Reading the data from CSV file 
+        cy.fixture('orders - Sheet1.csv').then((rows) => {
+            rows.forEach((row) => {
         cy.request({
-            method : 'GET',
+            method : 'POST',
             url : baseurl +"/books/3",
             headers: {
                 "content-type":"application/json"
-            }
+            },
+            body: {
+                        "bookId": row.bookId,
+                        "customerName": row.customerName
+                    }
         }).then((x)=>{
             expect(x.status).to.equal(200);
         })
